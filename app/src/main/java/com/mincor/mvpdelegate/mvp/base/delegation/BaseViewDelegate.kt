@@ -5,15 +5,11 @@ import com.mincor.mvpdelegate.mvp.base.IBasePresenter
 import com.mincor.mvpdelegate.mvp.base.IBaseView
 
 abstract class BaseViewDelegate<V, P>(override val presenter: P)
-    : IBaseDelegate<V, P>, IBasePresenter<V> by presenter
-    where V : IBaseView, P : IBasePresenter<V>
-{
-    override fun onViewCreated(view: V, viewLifecycle: Lifecycle) {
-        attachView(view, viewLifecycle)
-        delegate()
-    }
+    : IBaseDelegate<P>, IBasePresenter<V> by presenter
+    where V : IBaseView, P : IBasePresenter<V> {
 
-    override fun onViewDestroy() {
-        this.view = null
+    override fun onViewCreated(view: IBaseView, viewLifecycle: Lifecycle) {
+        attachView(view as V, viewLifecycle)
+        delegate()
     }
 }

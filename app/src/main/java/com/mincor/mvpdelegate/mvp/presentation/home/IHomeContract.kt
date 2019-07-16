@@ -14,5 +14,5 @@ interface IHomeContract {
         fun sayHello()
     }
 
-    interface IHomeDelegate : IBaseDelegate<IView, IPresenter>
+    interface IHomeDelegate : IBaseDelegate<IPresenter>
 }

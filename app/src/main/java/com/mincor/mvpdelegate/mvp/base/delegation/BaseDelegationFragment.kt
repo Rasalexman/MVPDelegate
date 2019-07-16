@@ -12,8 +12,8 @@ import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 
-abstract class BaseDelegationFragment<D, P, V> : Fragment(), IBaseView, KodeinAware
-        where V : IBaseView, P : IBasePresenter<V>, D : IBaseDelegate<V, P> {
+abstract class BaseDelegationFragment<D> : Fragment(), IBaseView, KodeinAware
+        where D : IBaseDelegate<out IBasePresenter<out IBaseView>> {
 
     override val kodein: Kodein by kodein()
 
@@ -34,6 +34,6 @@ abstract class BaseDelegationFragment<D, P, V> : Fragment(), IBaseView, KodeinAw
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        delegate.onViewCreated(this as V, this.lifecycle)
+        delegate.onViewCreated(this, this.lifecycle)
     }
 }

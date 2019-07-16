@@ -6,7 +6,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import org.kodein.di.generic.instance
 
 class HomeFragment :
-    BaseDelegationFragment<IHomeContract.IHomeDelegate, IHomeContract.IPresenter, IHomeContract.IView>(),
+    BaseDelegationFragment<IHomeContract.IHomeDelegate>(),
     IHomeContract.IView {
 
     override val layoutResId: Int = R.layout.fragment_home
