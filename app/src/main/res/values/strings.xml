@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">MVPDelegate</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_home_fragment">Hello Home fragment</string>
+    <string name="hello_search_fragment">Hello Search fragment</string>
+    <string name="hello_account_fragment">Hello Account fragment</string>
+    <string name="tab_home">Home</string>
+    <string name="tab_search">Search</string>
+    <string name="tab_account">Account</string>
+
+    <string name="show_button_title">SAY HELLO</string>
+</resources>
