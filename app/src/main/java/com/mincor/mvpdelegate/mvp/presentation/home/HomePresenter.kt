@@ -11,6 +11,11 @@ class HomePresenter : BasePresenter<IHomeContract.IView>(), IHomeContract.IPrese
     }
 
     override fun sayHello() {
+        /*
+        view?.stickySuspension<Unit> {
+            showHello(TAG)
+        }*/
+
         view?.showHello(TAG)
     }
 

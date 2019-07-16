@@ -13,7 +13,7 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 
 abstract class BaseDelegationFragment<D, P, V> : Fragment(), IBaseView, KodeinAware
-        where P : IBasePresenter<V>, V : IBaseView, D : BaseViewDelegate<V, P> {
+        where V : IBaseView, P : IBasePresenter<V>, D : IBaseDelegate<V, P> {
 
     override val kodein: Kodein by kodein()
 

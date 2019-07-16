@@ -6,12 +6,12 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import org.kodein.di.generic.instance
 
 class HomeFragment :
-    BaseDelegationFragment<HomeFragmentDelegate, IHomeContract.IPresenter, IHomeContract.IView>(),
+    BaseDelegationFragment<IHomeContract.IHomeDelegate, IHomeContract.IPresenter, IHomeContract.IView>(),
     IHomeContract.IView {
 
     override val layoutResId: Int = R.layout.fragment_home
 
-    override val delegate: HomeFragmentDelegate by instance()
+    override val delegate: IHomeContract.IHomeDelegate by instance()
 
     override fun showHello(value: String) {
         titleTextView.text = "HELLO FROM $value"

@@ -9,9 +9,6 @@ import com.mincor.mvpdelegate.R
 
 class AccountFragment : Fragment(), IAccountContract.IView {
 
-    override val presenter: IAccountContract.IPresenter
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

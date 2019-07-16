@@ -1,15 +1,15 @@
 package com.mincor.mvpdelegate.mvp.presentation.account
 
-import com.mincor.mvpdelegate.mvp.lifecycle.base.IBaseLifecyclePresenter
-import com.mincor.mvpdelegate.mvp.lifecycle.base.IBaseLifecycleView
+import com.mincor.mvpdelegate.mvp.base.IBasePresenter
+import com.mincor.mvpdelegate.mvp.base.IBaseView
 
 interface IAccountContract  {
 
-    interface IView : IBaseLifecycleView<IPresenter> {
+    interface IView : IBaseView {
         fun showHello()
     }
 
-    interface IPresenter : IBaseLifecyclePresenter<IView> {
+    interface IPresenter : IBasePresenter<IView> {
         fun sayHello()
     }
 

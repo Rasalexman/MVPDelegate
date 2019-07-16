@@ -48,8 +48,8 @@ abstract class BasePresenter<V : IBaseView> : IBasePresenter<V> {
     @Synchronized
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onViewReadyForContinuations() {
-
-        this.view?.let { viewInstance ->
+        val viewInstance = this.view
+        if (viewInstance != null) {
             val viewContinuationsIterator = viewContinuations.listIterator()
 
             while (viewContinuationsIterator.hasNext()) {
@@ -67,8 +67,8 @@ abstract class BasePresenter<V : IBaseView> : IBasePresenter<V> {
     @Synchronized
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun onViewReadyForStickyContinuations() {
-
-        this.view?.let { viewInstance ->
+        val viewInstance = this.view
+        if (viewInstance != null) {
             if (mustRestoreStickyContinuations) {
                 mustRestoreStickyContinuations = false
 
@@ -82,8 +82,6 @@ abstract class BasePresenter<V : IBaseView> : IBasePresenter<V> {
                 }
             }
         }
-
-
     }
 
     @Synchronized
@@ -119,17 +117,17 @@ abstract class BasePresenter<V : IBaseView> : IBasePresenter<V> {
      *
      * @param block code that has to be executed on the view
      */
-    /*@Suppress("UNCHECKED_CAST")
+    @Suppress("UNCHECKED_CAST")
     suspend fun <ReturnType> V.stickySuspension(
         block: V.(StickyContinuation<ReturnType>) -> Unit
     ): ReturnType {
-        return kotlin.coroutines.suspendCoroutine { continuation ->
+        return suspendCoroutine { continuation ->
             val stickyContinuation: StickyContinuation<ReturnType> =
-                com.mincor.mvpdelegate.mvp.lifecycle.base.StickyContinuation(continuation, this@BasePresenter)
+                StickyContinuation(continuation, this@BasePresenter)
             addStickyContinuation(stickyContinuation, block as V.(StickyContinuation<*>) -> Unit)
             block(stickyContinuation)
         }
-    }*/
+    }
 
     @Synchronized
     open fun cleanup() {
