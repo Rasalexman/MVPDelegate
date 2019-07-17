@@ -1,7 +1,9 @@
 package com.mincor.mvpdelegate.application
 
 import android.app.Application
-import com.mincor.mvpdelegate.mvp.presentation.home.HomeFragmentDelegate
+import com.mincor.mvpdelegate.mvp.presentation.account.AccountDelegate
+import com.mincor.mvpdelegate.mvp.presentation.account.AccountPresenter
+import com.mincor.mvpdelegate.mvp.presentation.home.HomeDelegate
 import com.mincor.mvpdelegate.mvp.presentation.home.HomePresenter
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -14,6 +16,9 @@ class MainApplication : Application(), KodeinAware {
 
     override val kodein: Kodein by Kodein.lazy {
         bind<HomePresenter>() with singleton { HomePresenter() }
-        bind<HomeFragmentDelegate>() with provider { HomeFragmentDelegate(instance()) }
+        bind<AccountPresenter>() with singleton { AccountPresenter() }
+
+        bind<AccountDelegate>() with provider { AccountDelegate(instance()) }
+        bind<HomeDelegate>() with provider { HomeDelegate(instance()) }
     }
 }

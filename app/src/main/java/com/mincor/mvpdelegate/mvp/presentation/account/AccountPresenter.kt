@@ -1,4 +1,18 @@
 package com.mincor.mvpdelegate.mvp.presentation.account
 
-class AccountPresenter {
+import com.mincor.mvpdelegate.mvp.base.BasePresenter
+
+class AccountPresenter : BasePresenter<IAccountContract.IView>(), IAccountContract.IPresenter {
+
+    override var view: IAccountContract.IView? = null
+
+    override fun onViewAttached(view: IAccountContract.IView) {
+        super.onViewAttached(view)
+
+        println("AccountPresenter view is attached")
+    }
+
+    override fun getUserData() {
+
+    }
 }

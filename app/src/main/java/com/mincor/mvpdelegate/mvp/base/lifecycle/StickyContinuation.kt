@@ -1,4 +1,4 @@
-package com.mincor.mvpdelegate.mvp.base
+package com.mincor.mvpdelegate.mvp.base.lifecycle
 
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -9,7 +9,7 @@ import kotlin.coroutines.resumeWithException
  */
 class StickyContinuation<ReturnType> constructor(
     private val continuation: Continuation<ReturnType>,
-    private val presenter: IBasePresenter<*>
+    private val presenter: IBaseLifecyclePresenter<*>
 ) : Continuation<ReturnType> by continuation {
 
     private var _resumeValue: ReturnType? = null
@@ -20,19 +20,28 @@ class StickyContinuation<ReturnType> constructor(
     val resumeException: Throwable?
         get() = _resumeException
 
+    override fun resumeWith(result: Result<ReturnType>) {
+        when(true) {
+            result.isSuccess -> {
+                result.getOrNull()?.let { value ->
+                    resume(value)
+                }
+            }
+            result.isFailure -> {
+                result.exceptionOrNull()?.let { exception ->
+                    resumeWithException(exception)
+                }
+            }
+        }
+    }
+
     private fun resume(value: ReturnType) {
         _resumeValue = value
         presenter.removeStickyContinuation(this)
         continuation.resume(value)
     }
 
-    override fun resumeWith(result: Result<ReturnType>) {
-        result.getOrNull()?.let { value ->
-            resume(value)
-        }
-    }
-
-    fun resumeWithException(exception: Throwable) {
+    private fun resumeWithException(exception: Throwable) {
         _resumeException = exception
         presenter.removeStickyContinuation(this)
         continuation.resumeWithException(exception)

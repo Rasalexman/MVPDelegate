@@ -29,6 +29,8 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.0.0'
     implementation 'androidx.navigation:navigation-ui-ktx:2.0.0'
 
+    implementation 'com.rasalexman.coroutinesmanager:coroutinesmanager:1.0.1'
+
     //--- DI
     implementation "org.kodein.di:kodein-di-generic-jvm:$kodeinVersion6"
     implementation "org.kodein.di:kodein-di-framework-android-core:$kodeinVersion6"

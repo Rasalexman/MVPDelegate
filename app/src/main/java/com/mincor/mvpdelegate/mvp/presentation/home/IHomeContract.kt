@@ -1,8 +1,8 @@
 package com.mincor.mvpdelegate.mvp.presentation.home
 
-import com.mincor.mvpdelegate.mvp.base.IBasePresenter
 import com.mincor.mvpdelegate.mvp.base.IBaseView
 import com.mincor.mvpdelegate.mvp.base.delegation.IBaseDelegate
+import com.mincor.mvpdelegate.mvp.base.lifecycle.IBaseLifecyclePresenter
 
 interface IHomeContract {
 
@@ -10,7 +10,7 @@ interface IHomeContract {
         fun showHello(value: String)
     }
 
-    interface IPresenter : IBasePresenter<IView> {
+    interface IPresenter : IBaseLifecyclePresenter<IView> {
         fun sayHello()
     }
 
