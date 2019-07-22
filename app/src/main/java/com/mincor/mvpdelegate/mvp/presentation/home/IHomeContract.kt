@@ -12,6 +12,9 @@ interface IHomeContract {
 
     interface IPresenter : IBaseLifecyclePresenter<IView> {
         fun sayHello()
+        fun showSingleContinuationState()
+        fun showManyContinuation()
+        fun showCounterContinuation()
     }
 
     interface IHomeDelegate : IBaseDelegate<IPresenter>

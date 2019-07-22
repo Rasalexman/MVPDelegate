@@ -1,8 +1,10 @@
 package com.mincor.mvpdelegate.mvp.presentation.home
 
 import com.mincor.mvpdelegate.mvp.base.lifecycle.BaseLifecyclePresenter
+import com.mincor.mvpdelegate.mvp.base.lifecycle.StickyStrategy
 import com.rasalexman.coroutinesmanager.CoroutinesProvider
 import com.rasalexman.coroutinesmanager.ICoroutinesManager
+import com.rasalexman.coroutinesmanager.launchOnUI
 import com.rasalexman.coroutinesmanager.launchOnUITryCatchFinally
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
@@ -10,9 +12,40 @@ import kotlinx.coroutines.withContext
 class HomePresenter : BaseLifecyclePresenter<IHomeContract.IView>(),
     IHomeContract.IPresenter, ICoroutinesManager {
 
+    init {
+        launchOnUI {
+            view().stickySuspension {
+                showManyContinuation()
+            }
+        }
+
+        launchOnUI {
+            view().stickySuspension(StickyStrategy.Single) {
+                showSingleContinuationState()
+            }
+        }
+
+        launchOnUI {
+            view().stickySuspension(StickyStrategy.Counter(3)) {
+                showCounterContinuation()
+            }
+        }
+    }
+
+    override fun showCounterContinuation() {
+        println("-----> HELLO FROM COUNTER CONTINUATION")
+    }
+
+    override fun showSingleContinuationState() {
+        println("-----> HELLO FROM SINGLE CONTINUATION")
+    }
+
+    override fun showManyContinuation() {
+        println("-----> HELLO FROM MANY CONTINUATION")
+    }
+
     override fun onViewAttached(view: IHomeContract.IView) {
         super.onViewAttached(view)
-
         println("VIEW ISA ATTACHED")
     }
 
@@ -20,7 +53,7 @@ class HomePresenter : BaseLifecyclePresenter<IHomeContract.IView>(),
         tryBlock = {
 
             val sum = withContext(CoroutinesProvider.COMMON) {
-                delay(10000L)
+                delay(3000L)
 
                 var period = 0f
                 for (i in 0 until 100) {
@@ -30,7 +63,7 @@ class HomePresenter : BaseLifecyclePresenter<IHomeContract.IView>(),
                 period
             }
 
-            view().stickySuspension {
+            view().stickySuspension<Unit>(StickyStrategy.Single) {
                 showHello("$TAG period = $sum")
             }
         }, catchBlock = {

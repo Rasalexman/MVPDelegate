@@ -10,4 +10,8 @@ abstract class BasePresenter<V : IBaseView> : IBasePresenter<V> {
     protected open fun onViewAttached(view: V) {
         // Nothing to do here. This is an event handled by the subclasses.
     }
+
+    protected open fun onViewDestroyed(view: V) {
+
+    }
 }

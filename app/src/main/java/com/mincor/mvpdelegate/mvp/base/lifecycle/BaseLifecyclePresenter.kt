@@ -77,6 +77,7 @@ abstract class BaseLifecyclePresenter<V : IBaseView> : BasePresenter<V>(),
                     val stickyContinuation = stickyContinuationBlockMap.key
                     val stickyContinuationBlock = stickyContinuationBlockMap.value
                     viewInstance.stickyContinuationBlock(stickyContinuation)
+                    stickyContinuation.checkStickyState()
                 }
             }
         }
@@ -104,7 +105,10 @@ abstract class BaseLifecyclePresenter<V : IBaseView> : BasePresenter<V>(),
 
     @Synchronized
     override fun removeStickyContinuation(continuation: StickyContinuation<*>): Boolean {
-        return stickyContinuations.remove(continuation) != null
+        return stickyContinuations.remove(continuation)?.let {
+            continuation.clear()
+            true
+        } ?: false
     }
 
     /**
@@ -117,18 +121,30 @@ abstract class BaseLifecyclePresenter<V : IBaseView> : BasePresenter<V>(),
      */
     @Suppress("UNCHECKED_CAST")
     suspend fun <ReturnType> V.stickySuspension(
+        strategy: StickyStrategy = StickyStrategy.Many,
         block: V.(StickyContinuation<ReturnType>) -> Unit
     ): ReturnType {
         return suspendCoroutine { continuation ->
             val stickyContinuation: StickyContinuation<ReturnType> =
-                StickyContinuation(continuation, this@BaseLifecyclePresenter)
+                StickyContinuation(continuation, this@BaseLifecyclePresenter, strategy)
             addStickyContinuation(stickyContinuation, block as V.(StickyContinuation<*>) -> Unit)
-            block(stickyContinuation)
+            block(stickyContinuation).also {
+                stickyContinuation.checkStickyState()
+            }
         }
     }
 
     @Synchronized
     open fun cleanup() {
-        //cancelAllCoroutines()
+        viewContinuations.clear()
+        stickyContinuations.clear()
+    }
+
+    private fun<ReturnType> StickyContinuation<ReturnType>.checkStickyState() {
+        when(this.strategy) {
+            is StickyStrategy.Single -> removeStickyContinuation(this)
+            is StickyStrategy.Counter -> this.increaseCounter()
+            is StickyStrategy.Many -> Unit
+        }
     }
 }
