@@ -13,5 +13,7 @@ abstract class BaseDelegate<V, out P>(override val presenter: P)
         delegate()
     }
 
-    override fun onViewDestroyed() = Unit
+    override fun onViewDestroyed() {
+        view = null
+    }
 }
