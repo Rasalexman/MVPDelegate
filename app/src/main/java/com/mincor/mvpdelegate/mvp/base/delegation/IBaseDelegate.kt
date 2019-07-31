@@ -4,8 +4,10 @@ import androidx.lifecycle.Lifecycle
 import com.mincor.mvpdelegate.mvp.base.IBasePresenter
 import com.mincor.mvpdelegate.mvp.base.IBaseView
 
-interface IBaseDelegate<P : IBasePresenter<out IBaseView>> {
+interface IBaseDelegate<out P>
+        where P : IBasePresenter<out IBaseView> {
     val presenter: P
-    fun delegate()
     fun onViewCreated(view: IBaseView, viewLifecycle: Lifecycle)
+    fun onViewDestroyed()
+    fun delegate()
 }

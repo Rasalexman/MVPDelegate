@@ -12,4 +12,6 @@ abstract class BaseLifecycleDelegate<V, P>(override val presenter: P)
         attachView(view as V, viewLifecycle)
         delegate()
     }
+
+    override fun onViewDestroyed() = Unit
 }

@@ -13,7 +13,7 @@ import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.kodein
 
 abstract class BaseDelegationFragment<D> : Fragment(), IBaseView, KodeinAware
-        where D : IBaseDelegate<out IBasePresenter<out IBaseView>> {
+        where D : IBaseDelegate<IBasePresenter<out IBaseView>> {
 
     override val kodein: Kodein by kodein()
 
@@ -30,10 +30,15 @@ abstract class BaseDelegationFragment<D> : Fragment(), IBaseView, KodeinAware
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_home, container, false)
+    ): View? = inflater.inflate(layoutResId, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         delegate.onViewCreated(this, this.lifecycle)
+    }
+
+    override fun onDestroyView() {
+        delegate.onViewDestroyed()
+        super.onDestroyView()
     }
 }
