@@ -14,6 +14,7 @@ abstract class BaseDelegate<V, out P>(override val presenter: P)
     }
 
     override fun onViewDestroyed() {
+        detachView()
         view = null
     }
 }
