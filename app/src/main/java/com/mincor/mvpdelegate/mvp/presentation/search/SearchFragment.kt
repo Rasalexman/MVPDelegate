@@ -22,10 +22,15 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  *
  */
+
+typealias Executions = SearchFragment.() -> Unit
+
 class SearchFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    private val blockStorage: MutableList<Executions> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +48,28 @@ class SearchFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_search, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        /*addBlock {
+            println("----> BLOCK #1")
+        }
+        addBlock { println("----> BLOCK #2") }
+        addBlock { println("----> BLOCK #3") }
+        addBlock { println("----> BLOCK #4") }
+
+        blockStorage.forEach { execution ->
+            this.execution()
+        }*/
+    }
+
+    fun addBlock(block: Executions) {
+        blockStorage.add(block)
+    }
+
     companion object {
+
+
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.

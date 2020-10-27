@@ -17,3 +17,5 @@ class HomeFragment :
         titleTextView.text = "HELLO FROM $value"
     }
 }
+
+

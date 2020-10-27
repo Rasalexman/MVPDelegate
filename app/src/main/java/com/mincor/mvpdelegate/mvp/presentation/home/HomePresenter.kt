@@ -2,17 +2,23 @@ package com.mincor.mvpdelegate.mvp.presentation.home
 
 import com.mincor.mvpdelegate.mvp.base.lifecycle.BaseLifecyclePresenter
 import com.mincor.mvpdelegate.mvp.base.lifecycle.StickyStrategy
+import com.mincor.mvpdelegate.mvp.base.lifecycle.sticky
 import com.rasalexman.coroutinesmanager.CoroutinesProvider
-import com.rasalexman.coroutinesmanager.ICoroutinesManager
 import com.rasalexman.coroutinesmanager.launchOnUI
 import com.rasalexman.coroutinesmanager.launchOnUITryCatchFinally
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import kotlin.random.Random
 
 class HomePresenter : BaseLifecyclePresenter<IHomeContract.IView>(),
-    IHomeContract.IPresenter, ICoroutinesManager {
+    IHomeContract.IPresenter {
 
     init {
+
+        sticky {
+            val count: Int = returnSomeIntType()
+        }
+
         launchOnUI {
             view().stickySuspension {
                 showManyContinuation()
@@ -30,6 +36,11 @@ class HomePresenter : BaseLifecyclePresenter<IHomeContract.IView>(),
                 showCounterContinuation()
             }
         }
+    }
+
+    fun returnSomeIntType(): Int {
+        println("-----> HELLO FROM returnSomeIntType")
+        return Random.nextInt(1000)
     }
 
     override fun showCounterContinuation() {
@@ -56,7 +67,8 @@ class HomePresenter : BaseLifecyclePresenter<IHomeContract.IView>(),
                 delay(3000L)
 
                 var period = 0f
-                for (i in 0 until 100) {
+                val max = Random.nextInt(100)
+                for (i in 0 until max) {
                     period += i * 0.45f
                 }
 

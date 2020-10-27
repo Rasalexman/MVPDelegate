@@ -4,13 +4,15 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.OnLifecycleEvent
 import com.mincor.mvpdelegate.mvp.base.BasePresenter
 import com.mincor.mvpdelegate.mvp.base.IBaseView
+import com.rasalexman.coroutinesmanager.ICoroutinesManager
+import com.rasalexman.coroutinesmanager.launchOnUI
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 abstract class BaseLifecyclePresenter<V : IBaseView> : BasePresenter<V>(),
-    IBaseLifecyclePresenter<V> {
+    IBaseLifecyclePresenter<V>, ICoroutinesManager {
     override var view: V? = null
 
     private var viewLifecycle: Lifecycle? = null
@@ -21,7 +23,7 @@ abstract class BaseLifecyclePresenter<V : IBaseView> : BasePresenter<V>(),
     private var mustRestoreStickyContinuations: Boolean = false
 
     @Synchronized
-    protected suspend fun view(): V {
+    suspend fun view(): V {
         if (isViewResumed.get()) {
             view?.let { return it }
         }
@@ -140,11 +142,20 @@ abstract class BaseLifecyclePresenter<V : IBaseView> : BasePresenter<V>(),
         stickyContinuations.clear()
     }
 
-    private fun<ReturnType> StickyContinuation<ReturnType>.checkStickyState() {
-        when(this.strategy) {
+    private fun <ReturnType> StickyContinuation<ReturnType>.checkStickyState() {
+        when (this.strategy) {
             is StickyStrategy.Single -> removeStickyContinuation(this)
             is StickyStrategy.Counter -> this.increaseCounter()
             is StickyStrategy.Many -> Unit
         }
+    }
+}
+
+inline fun <reified V : IBaseView> BaseLifecyclePresenter<V>.sticky(
+    strategy: StickyStrategy = StickyStrategy.Many,
+    noinline block: V.(StickyContinuation<Unit>) -> Unit
+) {
+    launchOnUI {
+        this@sticky.view().stickySuspension(strategy, block)
     }
 }
